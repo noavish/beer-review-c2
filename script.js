@@ -1,32 +1,45 @@
-$(document).ready(function () {
+function BeerReviewApp () {
     var beers = [];
     var sortingOrder = 1;
+    var $beerList = $('.beers-list');
     
-    function addBeer(name, category, rating) {
+    var addBeer = function (name, category, rating) {
         beers.push({ name: name, category: category, rating: rating });
     }
 
-    function sortingBeers (a, b) {
+    var sortingBeers = function (a, b) {
         return ((b.rating - a.rating) * sortingOrder);
     }
 
-    function renderBeers() {
-        $('.beers-list').find('li').remove();
+    var sortBeers = function () {
+        beers.sort(sortingBeers);
+        sortingOrder *= -1;
+    }
+
+    var renderBeers = function () {
+        $beerList.find('li').remove();
         for (var i = 0; i < beers.length; i++) {
-            $('.beers-list').append('<li>Beer Name: ' + beers[i].name + ' Beer Category: ' + beers[i].category + ' Beer Rating: ' + beers[i].rating + '</li>');
+            $beerList.append('<li>Beer Name: ' + beers[i].name + ' Beer Category: ' + beers[i].category + ' Beer Rating: ' + beers[i].rating + '</li>');
         }
     }
 
-    $('.post-beer').click(function () {
-        addBeer($('.beer-input').val(), $('.category-input').val(), $('.rating-input').val());
-        renderBeers();
-    });
+    return {
+        addBeer: addBeer, 
+        updateBeers: renderBeers, 
+        sortBeers: sortBeers
+    };
+}
 
-    $('.sort-beers').click(function () {
-        beers.sort(sortingBeers);
-        renderBeers();
-        sortingOrder *= -1;
-        $(this).toggleClass('worst-to-best');
-        $(this).toggleClass('best-to-worst');
-    });
+var beerReviewApp = BeerReviewApp();
+
+$('.post-beer').click(function() {
+    beerReviewApp.addBeer($('.beer-input').val(), $('.category-input').val(), $('.rating-input').val());
+    beerReviewApp.updateBeers();
+});
+
+$('.sort-beers').click(function () {
+    beerReviewApp.sortBeers();
+    beerReviewApp.updateBeers();
+    $(this).toggleClass('worst-to-best');
+    $(this).toggleClass('best-to-worst');
 });
