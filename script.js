@@ -1,15 +1,14 @@
 $(document).ready(function () {
     var beers = [];
-    var isNotSortedFromBest = true;
+    var sortingOrder = 1;
     
     function addBeer(name, category, rating) {
         beers.push({ name: name, category: category, rating: rating });
     }
 
-    $('.post-beer').click(function () {
-        addBeer($('.beer-input').val(), $('.category-input').val(), $('.rating-input').val());
-        renderBeers();
-    });
+    function sortingBeers (a, b) {
+        return ((b.rating - a.rating) * sortingOrder);
+    }
 
     function renderBeers() {
         $('.beers-list').find('li').remove();
@@ -18,17 +17,16 @@ $(document).ready(function () {
         }
     }
 
+    $('.post-beer').click(function () {
+        addBeer($('.beer-input').val(), $('.category-input').val(), $('.rating-input').val());
+        renderBeers();
+    });
+
     $('.sort-beers').click(function () {
-        if (isNotSortedFromBest) {
-            $('.sort-beers').html('Sort beers from worst to best');
-            beers.sort(function (a, b) { return b.rating - a.rating })
-            renderBeers();
-            isNotSortedFromBest = false;
-        } else {
-            $('.sort-beers').html('Sort beers from Best to worst');
-            beers.sort(function (a, b) { return a.rating - b.rating })
-            renderBeers();
-            isNotSortedFromBest = true;
-        }
+        beers.sort(sortingBeers);
+        renderBeers();
+        sortingOrder *= -1;
+        $(this).toggleClass('worst-to-best');
+        $(this).toggleClass('best-to-worst');
     });
 });

@@ -9,3 +9,11 @@ form {
 .user-post, .user-review {
   font-weight: bold;
 }
+
+.worst-to-best::after {
+  content: 'worst to best';
+}
+
+.best-to-worst::after {
+  content: 'best to worst';
+}
