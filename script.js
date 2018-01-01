@@ -38,8 +38,10 @@ $('.post-beer').click(function() {
 });
 
 $('.sort-beers').click(function () {
+    
     beerReviewApp.sortBeers();
     beerReviewApp.updateBeers();
+
     $(this).toggleClass('worst-to-best');
     $(this).toggleClass('best-to-worst');
 });
